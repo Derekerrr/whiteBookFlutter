@@ -155,6 +155,7 @@ class _PublishPostPageState extends State<PublishPostPage> {
                 minLines: 4, // 👈 这里设置最小显示6行
                 maxLines: null, // 不限制最大行数
                 style: const TextStyle(fontSize: 16),
+                keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
                   hintText: '分享你的想法...',
                   border: InputBorder.none,

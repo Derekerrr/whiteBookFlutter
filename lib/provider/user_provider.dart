@@ -37,6 +37,13 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  // 将用户信息保存到 shared_preferences 中
+  Future<void> clear() async {
+    _user = null;
+    LoginUserStorage.clear();
+  }
+
+
   // 修改用户信息（例如修改昵称、头像等）
   Future<void> updateUser(PeerUser updatedUser) async {
     _user = updatedUser;

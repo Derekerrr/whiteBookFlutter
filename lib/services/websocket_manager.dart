@@ -24,7 +24,7 @@ class WebSocketManager {
   Timer? _heartbeatTimer;
   Timer? _reconnectTimer;
 
-  final Duration _heartbeatInterval = Duration(seconds: 5);
+  final Duration _heartbeatInterval = Duration(seconds: 15);
   final Duration _reconnectInterval = Duration(seconds: 3);
 
   String? _token;

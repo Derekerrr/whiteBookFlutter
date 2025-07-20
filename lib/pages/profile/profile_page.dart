@@ -1,11 +1,11 @@
 import 'package:easy_chat/config/app_configs.dart';
 import 'package:easy_chat/pages/profile/edit/edit_profile_page.dart';
 import 'package:easy_chat/services/websocket_manager.dart';
-import 'package:easy_chat/store/login_user_storage.dart';
 import 'package:easy_chat/store/token_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/peer_user.dart';
+import '../../provider/post_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../utils/page_slide.dart';
 import '../commonComponents/circle_icon_button.dart';
@@ -18,8 +18,12 @@ class ProfilePage extends StatelessWidget {
   void _logout(BuildContext context) {
     // 关闭ws连接
     WebSocketManager().close();
+    // 清除token数据
     TokenStorage.clearToken();
-    LoginUserStorage.clear();
+    // 清除登录用户信息
+    context.read<UserProvider>().clear();
+    // 清除帖子加载缓存
+    context.read<PostProvider>().clear();
     Navigator.of(context).pushNamedAndRemoveUntil(
       '/login', // 目标路由名
           (route) => false, // 移除所有旧路由
