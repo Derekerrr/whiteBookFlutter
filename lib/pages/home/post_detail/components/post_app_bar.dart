@@ -33,7 +33,7 @@ class _PostAppBarState extends State<PostAppBar> {
         },
       ),
       pinned: true,
-      expandedHeight: 100,
+      expandedHeight: 0,
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black),
       flexibleSpace: FlexibleSpaceBar(

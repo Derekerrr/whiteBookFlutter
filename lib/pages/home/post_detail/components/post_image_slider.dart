@@ -22,7 +22,7 @@ class PostImageSlider extends StatefulWidget {
 }
 
 class _PostImageSliderState extends State<PostImageSlider> {
-  final Map<int, double> _aspectRatios = {};
+  final List<double> _aspectRatios = [];
   bool _isLoading = true;
   final double _maxHeightFactor = 0.6; // 图片高度最大占屏幕高度的比例
 
@@ -41,13 +41,10 @@ class _PostImageSliderState extends State<PostImageSlider> {
         final width = info.image.width.toDouble();
         final height = info.image.height.toDouble();
         if (height != 0) {
-          _aspectRatios[i] = width / height;
-        } else {
-          _aspectRatios[i] = 1.0;
+          _aspectRatios.add(width / height);
         }
         completer.complete();
       }, onError: (dynamic error, StackTrace? stackTrace) {
-        _aspectRatios[i] = 1.0; // 默认比例
         completer.complete();
       });
 
@@ -68,14 +65,19 @@ class _PostImageSliderState extends State<PostImageSlider> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // 当前图片的宽高比，默认为 1.0（正方形）
-    final aspectRatio = _aspectRatios[widget.currentPage] ?? 1.0;
+    // 以最高图片的高度为准
+    double minValue = _aspectRatios.reduce((a, b) => a < b ? a : b);
+    final aspectRatio = minValue;
 
     // 计算图片的最大高度，根据屏幕高度的某个比例（例如最大 80%）
     final maxHeight = screenHeight * _maxHeightFactor;
 
     // 计算当前图片应该展示的高度，确保图片高度不超过最大限制
     final containerHeight = (screenWidth / aspectRatio).clamp(0.0, maxHeight);
+
+
+    print(aspectRatio);
+
 
     return Column(
       children: [
@@ -107,7 +109,7 @@ class _PostImageSliderState extends State<PostImageSlider> {
             },
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
