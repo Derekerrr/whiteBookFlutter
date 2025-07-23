@@ -22,16 +22,33 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin {
   late Post _post;
   late AnimationController _controller;
+  double? _imageHeight;  // 用来存储图片的实际高度
+  double? _imageWidth;
 
   @override
   void initState() {
     super.initState();
+    _precacheImage();
     _post = widget.post;
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
       lowerBound: 0.8,
       upperBound: 1.2,
+    );
+  }
+
+  Future<void> _precacheImage() async {
+    final Image image = Image.network(AppConfigs.getResourceUrl(widget.post.images[0].imageUrl));
+    image.image.resolve(ImageConfiguration()).addListener(
+      ImageStreamListener((ImageInfo info, bool synchronousCall) {
+        if (mounted) {
+          setState(() {
+            _imageHeight = info.image.height.toDouble();  // 获取图片的实际高度
+            _imageWidth = info.image.width.toDouble();
+          });
+        }
+      }),
     );
   }
 
@@ -57,7 +74,6 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
           message: _post.isLiked ? "点赞成功" : '已取消',
           duration: const Duration(seconds: 2),
         );
-
       }
     } else {
       if (mounted) {
@@ -66,7 +82,6 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
           message: "失败",
           duration: const Duration(seconds: 2),
         );
-
       }
     }
   }
@@ -102,14 +117,43 @@ class _PostCardState extends State<PostCard> with SingleTickerProviderStateMixin
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 封面图，固定高度的图片
+              // 封面图，动态设置图片的 fit
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
-                child: Image.network(
-                  AppConfigs.getResourceUrl(widget.post.images[0].imageUrl),
-                  height: 200,  // 固定高度的图片
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // 限制最大高度
+                    double maxHeight = 300;
+
+                    // 检查图片是否为空
+                    if (widget.post.images.isEmpty) {
+                      return Container();  // 如果没有图片，返回一个空容器
+                    }
+
+
+                    // 获取图片宽高比例
+                    double imageAspectRatio = 1.0;
+                    if (_imageHeight != null && _imageWidth != null) {
+                      imageAspectRatio = widget.post.images.isNotEmpty
+                          ? _imageWidth! / _imageHeight!
+                          : 1.0;
+                    }
+
+                    // 根据图片宽高比例计算图片的高度
+                    double imageHeight = constraints.maxWidth / imageAspectRatio;
+
+                    // 判断图片是否超过最大高度，超出则使用 BoxFit.cover，否则保持原始比例
+                    BoxFit fit = imageHeight > maxHeight ? BoxFit.cover : BoxFit.fitWidth;
+
+                    return SizedBox(
+                      height: imageHeight > maxHeight ? maxHeight : imageHeight, // 最大高度限制
+                      width: double.infinity,
+                      child: Image.network(
+                        AppConfigs.getResourceUrl(widget.post.images[0].imageUrl),
+                        fit: fit, // 使用动态 fit
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 6),

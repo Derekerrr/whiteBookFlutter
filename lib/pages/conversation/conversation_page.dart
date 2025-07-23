@@ -24,20 +24,19 @@ class _ConversationPageState extends State<ConversationPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('消息', style: TextStyle(fontWeight: FontWeight.bold,),),
+        title: const Text('消息', style: TextStyle(fontWeight: FontWeight.w500,),),
         elevation: 0.5,
       ),
-      body: ListView.separated(
+      body: ListView.builder(
         itemCount: conversationList.length + 1,
-        separatorBuilder: (_, __) =>
-            const Divider(height: 0.1, indent: 77, endIndent: 20),
+        itemExtent: 66, // 每个元素固定 60 高
         itemBuilder: (context, index) {
           if (index < conversationList.length) {
             return ChatListItem(conversation: conversationList[index]);
           } else {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 10),
                 child: Text(
                   '-- 共${conversationList.length}个会话 --',
                   style: TextStyle(

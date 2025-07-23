@@ -166,7 +166,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('编辑资料', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('编辑资料', style: TextStyle(fontWeight: FontWeight.w500)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),

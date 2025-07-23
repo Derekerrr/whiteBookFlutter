@@ -1,5 +1,6 @@
 import 'package:easy_chat/models/type/app_enums.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/post_provider.dart';
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("首页", style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text("首页", style: TextStyle(fontWeight: FontWeight.w500),),
         backgroundColor: Colors.white,
       ),
       body: _loading && posts.isEmpty
@@ -109,20 +110,19 @@ class _HomePageState extends State<HomePage> {
           await _loadPosts();
         },
         child: Padding(
-          padding: const EdgeInsets.all(1),
-          child: GridView.builder(
+          padding: const EdgeInsets.all(4),
+          child: MasonryGridView.count(
             controller: _scrollController,
-            padding: const EdgeInsets.all(1),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 0,
-              crossAxisSpacing: 0,
-              childAspectRatio: 0.6,
-            ),
+            crossAxisCount: 2,
+            mainAxisSpacing: 1,
+            crossAxisSpacing: 1,
             itemCount: posts.length + 1,
             itemBuilder: (context, index) {
               if (index < posts.length) {
-                return PostCard(post: posts[index], cardParentPage: CardParentPage.homePae);
+                return PostCard(
+                  post: posts[index],
+                  cardParentPage: CardParentPage.homePae,
+                );
               } else {
                 return SizedBox(
                   width: double.infinity,

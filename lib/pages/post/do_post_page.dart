@@ -97,7 +97,7 @@ class _PublishPostPageState extends State<PublishPostPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('发布', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('发布', style: TextStyle(fontWeight: FontWeight.w500)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),

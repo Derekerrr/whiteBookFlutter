@@ -104,7 +104,7 @@ class _CommentItemState extends State<CommentItem> with SingleTickerProviderStat
                     _handleTapUserNameOrAvatar(widget.comment.userId);
                   },
                   child: CircleAvatar(
-                    radius: widget.comment.parentId == null ? 18 : 12,
+                    radius: widget.comment.parentId == null ? 16 : 12,
                     backgroundImage: NetworkImage(
                       AppConfigs.getResourceUrl(widget.comment.userAvatar),
                     ),

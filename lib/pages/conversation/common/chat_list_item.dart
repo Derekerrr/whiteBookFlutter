@@ -97,8 +97,8 @@ class ChatListItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
               AppConfigs.getResourceUrl(conversation.peerAvatar),
-              width: 48,
-              height: 48,
+              width: 44,
+              height: 44,
               fit: BoxFit.cover,
             ),
           ),
@@ -132,7 +132,7 @@ class ChatListItem extends StatelessWidget {
       ),
       title: Text(
         conversation.peerNickname,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
       ),
       subtitle: Text(
         conversation.lastMessage ?? '',
